@@ -1,0 +1,142 @@
+<div class="container">
+
+<mat-card>
+  <mat-toolbar color="accent">
+    <div align="center" style="color:white;text-align: right;">
+
+    Article CMS
+    </div>
+   
+  </mat-toolbar>
+<br><br>
+
+  <mat-card-content>
+    <form [formGroup]="articleForm" (ngSubmit)="onFormSubmit(articleForm.value)">
+      <label>Content</label>
+      <ejs-richtexteditor #toolsRTE id='alltoolRTE' [toolbarSettings]='tools' formControlName="content" required
+     ></ejs-richtexteditor>
+     <mat-error>
+      <span *ngIf="!articleForm.get('content').value && articleForm.get('content').touched"></span>
+      
+    </mat-error>
+
+    <div class="form-group">
+      <fieldset class="form-group">
+
+          <label>Upload Image</label>
+          {{imageError}}
+          <div class="custom-file fileInputProfileWrap">
+              <input type="file" (change)="fileChangeEvent($event)" class="fileInputProfile">
+              <div class="img-space">
+
+                  <ng-container *ngIf="isImageSaved";>
+                      <img [src]="cardImageBase64" id="imageupload" />
+                  </ng-container>
+               
+
+              </div>
+
+          </div>
+      </fieldset>
+  </div>
+  <a class="btn btn-danger" (click)="removeImage()" *ngIf="isImageSaved">Remove</a>
+            <table style="margin-top: 20px;">
+              
+              <tr>
+              
+                <td >
+                  <mat-form-field class="demo-full-width">
+                    <input formControlName="title" matTooltip="Enter Title" matInput placeholder="Title">
+                  </mat-form-field>
+                  <mat-error>
+                    <span *ngIf="!articleForm.get('title').value && articleForm.get('title').touched"></span>
+                  </mat-error>
+                </td>
+
+                
+                <td class="tbl1">
+                  <mat-form-field class="demo-full-width">
+                    <input matInput [matDatepicker]="picker" matTooltip="Creation Date" formControlName="creationDate" placeholder="Choose Date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error>
+                    <span *ngIf="!articleForm.get('creationDate').value && articleForm.get('creationDate').touched"></span>
+                  </mat-error>
+                </td>
+                <td class="tbl1">
+                  <mat-form-field class="demo-full-width">
+                    <input formControlName="category" matTooltip="Enter Category" matInput placeholder="Category">
+                  </mat-form-field>
+                  <mat-error>
+                    <span *ngIf="!articleForm.get('category').value && articleForm.get('category').touched"></span>
+                  </mat-error>
+                </td>
+                <td class="tbl1">
+                  <mat-form-field class="demo-full-width">
+                    <input matTooltip="Author" formControlName="author" matInput placeholder="Author">
+                  </mat-form-field>
+                  <mat-error>
+                    <span *ngIf="!articleForm.get('author').value && articleForm.get('author').touched"></span>
+                  </mat-error>
+                </td>
+              </tr>
+              
+              <tr>
+                <td  class="content-center">
+                  <button type="submit" mat-raised-button color="accent" matTooltip="Click Submit Button" [disabled]="!articleForm.valid">Submit</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <button type="reset" mat-raised-button color="accent" matTooltip="Click Reset Button" (click)="resetForm()">Reset</button>
+                </td>
+                <td>
+                  <p *ngIf="dataSaved" style="color:rgb(0, 128, 0);font-size:20px;font-weight:bold" Class="success" align="left">
+                    {{massage}}
+                  </p>
+                </td>
+              </tr>
+            </table>
+<br><br>
+<mat-toolbar color="accent">
+<div align="center" style="color: white;
+float: left;
+width: 50%;">
+
+  Article List
+  </div>
+  <div style="width: 50%;
+  display: flex;
+  justify-content: center;">
+  <input type="text" id="searchTxtbox" name="searchTxtbox"  #searchTxtbox>
+  <button type="button" (click)="searchArticle(searchTxtbox.value)" class="btn btn-success">Search</button>
+</div>
+</mat-toolbar>
+      <table class="table" >
+
+
+          <tr ngclass="btn-primary">
+            <th class="tbl2">Title</th>
+            <th class="tbl2">Creation Date</th>
+            <th class="tbl2">Category</th>
+            <th class="tbl2">Author</th>
+            <th class="tbl2">Edit</th>
+            <th class="tbl2">Delete</th>
+          </tr>
+          <tr *ngFor="let article of allArticles | async">
+            <td class="tbl2">{{article.title}}</td>
+            <td class="tbl2">{{article.creationDate | date }}</td>
+            <td class="tbl2">{{article.category}}</td>
+            <td class="tbl2">{{article.author}}</td>
+            <td class="tbl2">
+              <button type="button" class="btn btn-info" matTooltip="Click Edit Button" (click)="loadArticleToEdit(article.id)">Edit</button>
+            </td>
+            <td class="tbl2">
+              <button type="button" class="btn btn-danger" matTooltip="Click Delete Button" (click)="deleteArticle(article.id)">Delete</button>
+            </td>
+          </tr>
+
+        </table>
+
+    </form>
+  </mat-card-content>
+</mat-card>
+
+</div>
